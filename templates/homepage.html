@@ -6,15 +6,15 @@
 <body>
 
     <p>Students:</p>
-    <ul> s
-    {% for student in students %}
-        <li><a href="/student?github={{ grades[student][1] }}">{{ student }}</a></li>
+    <ul> 
+    {% for firstname, lastname, github in students %}
+        <li><a href="/student?github={{ github }}">{{ firstname }} {{ lastname }}</a></li>
     {% endfor %}
     </ul>
 
     <p>Projects:</p>
     <ul>
-    {% for project in projects %}
+    {% for (project,) in projects %}
         <li><a href="/project?title={{ project }}">{{ project }}</a></li>
     {% endfor %}
     </ul>

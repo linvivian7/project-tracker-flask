@@ -19,7 +19,30 @@
     {% endfor %}
     </ul>
 
+    <p>Assign Grades</p>
+    <form action="/assign-grade" method="POST">
+        Select Student<br> 
+        <select name="student">
+            {% for firstname, lastname, github in students %}
+                <option value="{{ github }}">{{ firstname }} {{ lastname }}</option>
+            {% endfor %}
+        </select><br>
+
+        Select Project<br> 
+        <select name="project">
+            {% for (project,) in projects %}
+                <option value="{{ project }}">{{ project }}</option>
+            {% endfor %}
+        </select><br>
+        Enter grade:<br> 
+        <input type="number" name="grade">
+        <br>
+        <input type="submit" value="Submit">
+
+    </form><br>
+
 <a href="/search">Search here for projects and students</a><br>
-<a href="/student-add">Add student here</a>
+<a href="/student-add">Add student here</a><br>
+<a href="/project-add">Add project here</a>
 </body>
 </html>

@@ -5,15 +5,23 @@
   <title>Student Creation Form</title>
 </head>
 <body>
-<form action="/student-added" method="POST">
-  First name:
-  <input type="text" name="firstname" required><br>
-  Last name:
-  <input type="text" name="lastname" required><br>
-  Github Username:
-  <input type="text" name="github" required><br>
-  <input type="submit" value="Submit">
-</form>
 
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %} <br>
+
+    <form action="/student-added" method="POST">
+      First name:
+      <input type="text" name="firstname" required><br>
+      Last name:
+      <input type="text" name="lastname" required><br>
+      Github Username:
+      <input type="text" name="github" required><br>
+      <input type="submit" value="Submit">
+    </form><br>
+
+    <a href="/search">Search here for projects and students</a><br>
+    <a href="/project-add">Add project here</a><br>
+    <a href="/">Homepage</a>
 </body>
 </html>

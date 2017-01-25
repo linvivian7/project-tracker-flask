@@ -34,6 +34,7 @@ def get_student_by_github(github):
                                                   row[2])
     return row
 
+
 def get_projects():
     """"""
 
@@ -45,6 +46,7 @@ def get_projects():
     rows = db_cursor.fetchall()
 
     return rows
+
 
 def get_students():
     """"""
@@ -66,15 +68,31 @@ def make_new_student(first_name, last_name, github):
     """
 
     QUERY = """
-    INSERT INTO Students 
+    INSERT INTO students
     VALUES (:first_name, :last_name, :github)
     """
-    
+
     db.session.execute(QUERY, {'first_name': first_name,
-                                'last_name': last_name,
-                                'github': github})
+                               'last_name': last_name,
+                               'github': github})
     db.session.commit()
     print "Successfully added student: %s %s" % (first_name, last_name)
+
+
+def make_new_project(title, description, max_grade):
+    """
+    """
+
+    QUERY = """
+    INSERT INTO projects (title, description, max_grade)
+    VALUES (:title, :description, :max_grade)
+    """
+
+    db.session.execute(QUERY, {'title': title,
+                               'description': description,
+                               'max_grade': max_grade})
+    db.session.commit()
+    print "Successfully added project: %s" % (title)
 
 
 def get_project_by_title(title):
@@ -111,9 +129,32 @@ def get_grade_by_github_title(github, title):
 def assign_grade(github, title, grade):
     """Assign a student a grade on an assignment and print a confirmation."""
 
-    QUERY = """INSERT INTO Grades (student_github, project_title, grade)
-               VALUES (:github, :title, :grade)"""
-    db_cursor = db.session.execute(QUERY, {'github': github, 'title': title, 'grade': grade})
+    QUERY1 = """
+             SELECT grade
+             FROM grades
+             WHERE (student_github= :github AND
+                     project_title= :title
+                    )
+             """
+
+    db_cursor = db.session.execute(QUERY1, {'github': github, 'title': title})
+    grade = db_cursor.fetchone()
+
+    if grade:
+        QUERY2 = """
+                 UPDATE grades
+                 SET grade= :grade
+                 WHERE student_github= :github AND project_title= :title;
+                 """
+
+    else:
+        QUERY2 = """
+                 INSERT INTO Grades (student_github, project_title, grade)
+                 VALUES (:github, :title, :grade)
+                 """
+
+    db.session.execute(QUERY2, {'github': github, 'title': title, 'grade': grade})
+
     db.session.commit()
     print "Successfully assigned grade of %s for %s in %s" % (
         grade, github, title)
@@ -132,6 +173,7 @@ def get_grades_by_github(github):
         print "Student %s received grade of %s for project %s" % (
             github, row[1], row[0])
     return rows
+
 
 def get_grades_by_title(title):
     """Get a list of all student grades for a project by its title"""
@@ -190,7 +232,6 @@ def handle_input():
         elif command == "project_grades":
             title = args[0]
             get_grades_by_title(title)
-
 
 
 if __name__ == "__main__":

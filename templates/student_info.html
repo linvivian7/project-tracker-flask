@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <title>Student Info</title>
+</head>
+<body>
+
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %}
+
+<h1>{{ first }} {{ last }}</h1>
+
+<p>GitHub Account: {{ github }}</p>
+    <ul>
+    {% for project_title, grade in grades %}
+        <li>{{ project_title }} has grade {{ grade }}.</li>
+    {% endfor %}
+    </ul>
+<a href="/search">Search here for projects and students</a><br>
+<a href="/student-add">Add student here</a>
+</body>
+</html>
